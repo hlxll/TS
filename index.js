@@ -95,10 +95,13 @@ var UserName = /** @class */ (function () {
     }
     Object.defineProperty(UserName.prototype, "fullname", {
         //存取器getter/setter来截取对对象成员的访问
+        //存取器要求你将编译器设置为输出ES5或更高（tsc -t es5 index.ts），只带有get不带有set的存取器自动被推断为readonly
         get: function () {
+            console.log('获取fullname');
             return this._fullname;
         },
         set: function (newName) {
+            console.log('设置fullname');
             this._fullname = newName;
         },
         enumerable: false,
@@ -115,8 +118,11 @@ var UserName = /** @class */ (function () {
     UserName.prototype.getNum = function () {
         return this.num;
     };
+    //其他是类被实例化的时候才会被初始化的属性，但是staic静态成员，存在于类本身上，访问时候可以直接类名访问
+    UserName.origin = { x: 0, y: 0 };
     return UserName;
 }());
+console.log(UserName.origin);
 // 使用继承扩展类
 var RootName = /** @class */ (function (_super) {
     __extends(RootName, _super);
@@ -132,7 +138,8 @@ var RootName = /** @class */ (function (_super) {
     return RootName;
 }(UserName));
 var setName = new RootName("xulinlin", 13);
-var myNewName = setName.setName('protected访问');
+setName.fullname = "存取器设置";
+console.log(setName.fullname);
 // 类定义============================================================================================================================================================类定义
 // 函数定义
 function run(name, age) {

@@ -123,6 +123,8 @@ firendChild.firstName = 'huang'
 */
 
 class UserName {
+    //其他是类被实例化的时候才会被初始化的属性，但是staic静态成员，存在于类本身上，访问时候可以直接类名访问
+    static origin = { x: 0, y: 0 }
     public name: string;
     private _fullname: string;
     //只读必须在声明时或构造函数里被初始化
@@ -133,10 +135,13 @@ class UserName {
         this.name = name
     }
     //存取器getter/setter来截取对对象成员的访问
+    //存取器要求你将编译器设置为输出ES5或更高（tsc -t es5 index.ts），只带有get不带有set的存取器自动被推断为readonly
     get fullname(): string {
+        console.log('获取fullname')
         return this._fullname
     }
     set fullname(newName: string) {
+        console.log('设置fullname')
         this._fullname = newName
     }
     //private不能在他的类外部访问
@@ -151,6 +156,8 @@ class UserName {
         return this.num
     }
 }
+// console.log(UserName.origin);
+
 // 使用继承扩展类
 class RootName extends UserName {
     constructor(name: string, num: number) {
@@ -164,7 +171,27 @@ class RootName extends UserName {
     }
 }
 const setName = new RootName("xulinlin", 13);
-const myNewName = setName.setName('protected访问')
+setName.fullname = "存取器设置"
+console.log(setName.fullname)
+
+//抽象类作为派生类的基类，通常不会直接实例化，且内部的抽象方法不包含具体实现，必须在派生类中实现
+abstract class Department {
+    constructor() {
+
+    }
+    abstract printMeet(): void;
+}
+// 类当做接口使用
+class interClass {
+    x: number;
+}
+interface ClassInterface extends interClass {
+    y: number
+}
+let data: ClassInterface = {
+    x: 1,
+    y: 2
+}
 
 
 // 类定义============================================================================================================================================================类定义
