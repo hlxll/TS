@@ -172,7 +172,7 @@ class RootName extends UserName {
 }
 const setName = new RootName("xulinlin", 13);
 setName.fullname = "存取器设置"
-console.log(setName.fullname)
+// console.log(setName.fullname)
 
 //抽象类作为派生类的基类，通常不会直接实例化，且内部的抽象方法不包含具体实现，必须在派生类中实现
 abstract class Department {
@@ -196,10 +196,14 @@ let data: ClassInterface = {
 
 // 类定义============================================================================================================================================================类定义
 
-// 函数定义
+
+
+/**
+ * 函数定义++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数定义
+*/
 function run(name: string, age?: number): string {
 
-    //定义返回值类型
+    //定义返回值类型,没加？的参数是必传的
     //形参加问号，调用时候就可传可不传,可选参数必须放最后面
     // 调用实参
     if (age) {
@@ -210,16 +214,17 @@ function run(name: string, age?: number): string {
 
     return 'run'
 }
-run('必须传递')
+// run('必须传递')
 var run2 = function (name: string, age: number = 20): number {
-    //默认参数，调用这个方法的时候，就可以不传
-    return 1;
+    //默认参数，调用这个方法的时候，就可以不传,默认参数可以放前面，但是调用传值时候，不传值必须明确传入undefined
+    return age;
 }
+// console.log(run2('huanglin'))
 //void用于定义没有返回值的方法
 function nullReturn(): void {
     console.log('null return')
 }
-// 剩余参数
+// 剩余参数,不知道还有多少参数时候，可以在后面用...定义，会被编译成数组
 function run3(a: number, ...result: number[]): number {
     //形参可以前面放一两个参数，也可以不放
     for (let i = 0; i < result.length; i++) {
@@ -227,6 +232,47 @@ function run3(a: number, ...result: number[]): number {
     }
     return 1
 }
+// run3(1, 2, 3, 4, 5)
+interface Card {
+    suit: string;
+    card: number;
+}
+interface Deck {
+    suits: string[];
+    cards: number[];
+    createCardPicker(this: Deck): () => Card;
+}
+let deck: Deck = {
+    suits: ["hearts", "spades", "clubs", "diamonds"],
+    cards: [1, 2, 3, 4],
+    createCardPicker: function (this: Deck) {
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+            return { suit: this.suits[pickedSuit], card: pickedCard % 13 };
+        }
+    }
+}
+
+let cardPicker = deck.createCardPicker();
+let pickedCard = cardPicker();
+
+//this参数在回调函数里
+interface UIElement {
+    addClickListener(onclick: (this: void, e: Event) => void): void;
+}
+class Handler {
+    info: string;
+    onClickGood(this: void, e: Event) {
+        console.log('clicked!');
+    };
+    // onClickGood = (e: Event) => { }
+}
+let h = new Handler();
+
+// uiElement.addClickListener(h.onClickGood);
+//当在回调函数中使用this，this是underfined，也可以传递this，在回调函数时候也要传入this，或者回调函数可以设置成箭头函数，箭头函数不会捕获this
+
 
 //方法重载
 function getInfo(name: string): string;
@@ -238,35 +284,79 @@ function getInfo(str: any): any {
         return '年龄' + str
     }
 }
-// 类
-class person {
-    name: string;
-    public age: number;
-    constructor(n: string) { //构造函数，实例化时候调用的方法
-        this.name = n;
-        this.age = 12;
-    }
-    getName(): string {
-        return this.name;
-    }
-    setName(name: string): void {
-        this.name = name
-    }
-}
-//类继承
-class Web extends person {
-    constructor(name: string) {
-        super(name);
-    }
-    //自定义方法,如果父类和子类有一样的方法，先找子类，没有才会去父类找
-    work() {
-        console.log(`${this.name}`)
-    }
-}
-// 类修饰符，默认，pubilc，共有 在类里面，子类，类外面都可以访问
-//private在类里面，子类可以访问类外面不能
-//protected类里面可以访问，子类和类外部不能访问
+getInfo('123')
+/**
+ * 函数定义=============================================================================================================================================函数定义
+*/
 
+/**
+ * 泛型+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++泛型
+*/
+// 无法创建泛型枚举和泛型命名空间
+
+//定义一个可以传任何类型的函数，且让参数和返回值类型相同，如果使用any，是不可控的，使用泛型可以控制
+function identity<T>(arg: T): T {
+    return arg;
+}
+//定义泛型的函数，处理的时候就得当他是任意类型的，比如获取他的length就不行，如果是数字，没有length
+identity<string>('huanglin')
+//也可以不写<>中类型，直接传参数，编译器根据传入参数自动帮助我们确定T的类型
+identity('huanglin');
+interface IdentityFace {
+    <T>(arg: T): T,
+    <T>(arg: Array<T>): Array<T>
+}
+
+//泛型类
+class IdentityClass<T> {
+    name: T;
+    add: (x: T) => T;
+}
+let identClass = new IdentityClass<string>()
+
+//给泛型添加一下约束, 必须包含必须的属性
+interface LengthWise {
+    length: number
+}
+function loggingIdentity<T extends LengthWise>(arg: T): T {
+    console.log(arg.length);  // Now we know it has a .length property, so no more error
+    return arg;
+}
+//这个时候的泛型函数，传入的参数就会被限制了，不能传入数字等没有length的
+// loggingIdentity({length: 1})
+
+//在泛型约束中使用类型参数       ??????
+// interface T {
+//     K: string
+// }
+// function getProperty(obj: T, key: K) {
+//     return obj[key];
+// }
+
+// let x = { a: 1, b: 2, c: 3, d: 4 };
+
+// getProperty(x, "a"); // okay
+// getProperty(x, "m"); // error: Argument of type 'm' isn't assignable to 'a' | 'b' | 'c' | 'd'.
+
+// 在泛型里使用类类型     ?????
+
+/**
+ * 泛型=================================================================================================================================================================泛型
+*/
+
+/**
+ * 枚举+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++枚举
+*/
+//枚举，没有赋值，第一个默认是0，后面递增加一
+enum EnumData {
+    X,
+    Y,
+    Z
+}
+
+/**
+ * 枚举===================================================================================================================================================================枚举
+*/
 
 // 静态属性和方法
 

@@ -122,7 +122,7 @@ var UserName = /** @class */ (function () {
     UserName.origin = { x: 0, y: 0 };
     return UserName;
 }());
-console.log(UserName.origin);
+// console.log(UserName.origin);
 // 使用继承扩展类
 var RootName = /** @class */ (function (_super) {
     __extends(RootName, _super);
@@ -139,11 +139,29 @@ var RootName = /** @class */ (function (_super) {
 }(UserName));
 var setName = new RootName("xulinlin", 13);
 setName.fullname = "存取器设置";
-console.log(setName.fullname);
+// console.log(setName.fullname)
+//抽象类作为派生类的基类，通常不会直接实例化，且内部的抽象方法不包含具体实现，必须在派生类中实现
+var Department = /** @class */ (function () {
+    function Department() {
+    }
+    return Department;
+}());
+// 类当做接口使用
+var interClass = /** @class */ (function () {
+    function interClass() {
+    }
+    return interClass;
+}());
+var data = {
+    x: 1,
+    y: 2
+};
 // 类定义============================================================================================================================================================类定义
-// 函数定义
+/**
+ * 函数定义++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数定义
+*/
 function run(name, age) {
-    //定义返回值类型
+    //定义返回值类型,没加？的参数是必传的
     //形参加问号，调用时候就可传可不传,可选参数必须放最后面
     // 调用实参
     if (age) {
@@ -154,17 +172,18 @@ function run(name, age) {
     }
     return 'run';
 }
-run('必须传递');
+// run('必须传递')
 var run2 = function (name, age) {
     if (age === void 0) { age = 20; }
-    //默认参数，调用这个方法的时候，就可以不传
-    return 1;
+    //默认参数，调用这个方法的时候，就可以不传,默认参数可以放前面，但是调用传值时候，不传值必须明确传入undefined
+    return age;
 };
+// console.log(run2('huanglin'))
 //void用于定义没有返回值的方法
 function nullReturn() {
     console.log('null return');
 }
-// 剩余参数
+// 剩余参数,不知道还有多少参数时候，可以在后面用...定义，会被编译成数组
 function run3(a) {
     var result = [];
     for (var _i = 1; _i < arguments.length; _i++) {
@@ -176,6 +195,37 @@ function run3(a) {
     }
     return 1;
 }
+var deck = {
+    suits: ["hearts", "spades", "clubs", "diamonds"],
+    cards: [1, 2, 3, 4],
+    createCardPicker: function () {
+        var _this = this;
+        return function () {
+            var pickedCard = Math.floor(Math.random() * 52);
+            var pickedSuit = Math.floor(pickedCard / 13);
+            return { suit: _this.suits[pickedSuit], card: pickedCard % 13 };
+        };
+    }
+};
+var cardPicker = deck.createCardPicker();
+var pickedCard = cardPicker();
+var Handler = /** @class */ (function () {
+    function Handler() {
+    }
+    Handler.prototype.onClickGood = function (e) {
+        console.log('clicked!');
+    };
+    ;
+    return Handler;
+}());
+var h = new Handler();
+var uiElement = {
+    addClickListener: function (fun) {
+        console.log('测试this');
+        fun;
+    }
+};
+uiElement.addClickListener(h.onClickGood);
 function getInfo(str) {
     if (typeof str == 'string') {
         return '名称' + str;
@@ -184,35 +234,10 @@ function getInfo(str) {
         return '年龄' + str;
     }
 }
-// 类
-var person = /** @class */ (function () {
-    function person(n) {
-        this.name = n;
-        this.age = 12;
-    }
-    person.prototype.getName = function () {
-        return this.name;
-    };
-    person.prototype.setName = function (name) {
-        this.name = name;
-    };
-    return person;
-}());
-//类继承
-var Web = /** @class */ (function (_super) {
-    __extends(Web, _super);
-    function Web(name) {
-        return _super.call(this, name) || this;
-    }
-    //自定义方法,如果父类和子类有一样的方法，先找子类，没有才会去父类找
-    Web.prototype.work = function () {
-        console.log("" + this.name);
-    };
-    return Web;
-}(person));
-// 类修饰符，默认，pubilc，共有 在类里面，子类，类外面都可以访问
-//private在类里面，子类可以访问类外面不能
-//protected类里面可以访问，子类和类外部不能访问
+getInfo('123');
+/**
+ * 函数定义=============================================================================================================================================函数定义
+*/
 // 静态属性和方法
 // es5中
 // function jintai(){}
