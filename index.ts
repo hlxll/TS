@@ -48,13 +48,22 @@ var Classobj = new Numbers();
 //Map对象,  es6的语法，在编译时候需要加上tsc --target es6 index.ts
 // let myMap = new Map();
 // myMap.set("key3","value3");
-// console.log(myMap)
+// //console.log(myMap)
 interface readonlyData {
-    readonly name: string
+    readonly name: string;
+    readonly password: Array<number>
 }
 var rO: readonlyData = {
-    name: 'huanglin'
+    name: 'huanglin',
+    password: [1, 2, 3, 4]
 }
+let ro: ReadonlyArray<number> = [1, 2, 3, 4]
+ro = [2, 3, 4]//不能修改单个索引数据，不能push等，但是直接替换没报错
+//console.log(ro)
+let a: number[] = [1, 2, 3, 4]
+// a = ro只读属性不能直接分配,但是可以用类型断言重写
+a = ro as number[]
+//readonly是只读，只能在初始化定义数据，后面不能修改数据，
 // rO.name = 'asd'不能修改，只能初始化时候修改
 
 //ts接口定义,再由另外的定义实现这个接口，不能转换为js，这个是ts的一部分
@@ -65,7 +74,8 @@ interface Iperson {
 }
 var customer: Iperson = {
     firstName: 'huang',
-    sayHi: (): string => { return "Hi huanglin" }
+    sayHi: (): string => { return "Hi huanglin" },
+    12: 'huanglin'
 }
 // 接口中可以将数组的索引值和元素设置为不同类型，索引可以是数字或字符串
 interface arrNum {
@@ -111,9 +121,24 @@ firendChild.firstName = 'huang'
 // namespace Drawing { 
 //     export class Circle implements IShape { 
 //         public draw() { 
-//             console.log("Circle is drawn"); 
+//             //console.log("Circle is drawn"); 
 //         }  
 //     }
+// }
+
+
+class Control {
+    private state: string
+}
+interface SelectAbled extends Control {
+    select(): void
+}
+//接口继承类类型时，会继承类的成员但不包括其实现，会继承类的private和protected成员，上面的接口SelectAbled是有select方法和state验证
+class Button extends Control implements SelectAbled {
+    select() { }
+}
+// class Image implements SelectAbled{
+//     select(){}
 // }
 
 
@@ -130,18 +155,18 @@ class UserName {
     //只读必须在声明时或构造函数里被初始化
     readonly password: number;
     //new实例化这个类时候，传递的参数，要这个构造函数获取
-    //在构造函数参数加只读，把定义和传参合并
+    //在构造函数加参数，把定义和传参合并
     public constructor(name: string, readonly num: number) {
         this.name = name
     }
     //存取器getter/setter来截取对对象成员的访问
-    //存取器要求你将编译器设置为输出ES5或更高（tsc -t es5 index.ts），只带有get不带有set的存取器自动被推断为readonly
+    //存取器要求你将编译器设置为输出ES5或更高（tsc -t es5 index.ts），
+    //只带有get不带有set的存取器自动被推断为readonly,
+    //存取器是为了防止数据直接被访问，在访问或者设置前加一些判断
     get fullname(): string {
-        console.log('获取fullname')
         return this._fullname
     }
     set fullname(newName: string) {
-        console.log('设置fullname')
         this._fullname = newName
     }
     //private不能在他的类外部访问
@@ -156,7 +181,7 @@ class UserName {
         return this.num
     }
 }
-// console.log(UserName.origin);
+// //console.log(UserName.origin);
 
 // 使用继承扩展类
 class RootName extends UserName {
@@ -166,13 +191,13 @@ class RootName extends UserName {
     //继承之后可以使用基类的数据
     setName(name) {
         this.name = name
-        console.log(super.getNewName());
-        console.log(super.getNum())
+        //console.log(super.getNewName());
+        //console.log(super.getNum())
     }
 }
 const setName = new RootName("xulinlin", 13);
 setName.fullname = "存取器设置"
-// console.log(setName.fullname)
+setName.getNum()
 
 //抽象类作为派生类的基类，通常不会直接实例化，且内部的抽象方法不包含具体实现，必须在派生类中实现
 abstract class Department {
@@ -181,6 +206,13 @@ abstract class Department {
     }
     abstract printMeet(): void;
 }
+class abstractFun extends Department {
+    printMeet() {
+        //console.log('抽象方法实现')
+    }
+}
+let absFun = new abstractFun();
+absFun.printMeet()
 // 类当做接口使用
 class interClass {
     x: number;
@@ -207,9 +239,9 @@ function run(name: string, age?: number): string {
     //形参加问号，调用时候就可传可不传,可选参数必须放最后面
     // 调用实参
     if (age) {
-        console.log(`${name}+${age}`)
+        //console.log(`${name}+${age}`)
     } else {
-        console.log(`${name}`)
+        //console.log(`${name}`)
     }
 
     return 'run'
@@ -219,16 +251,16 @@ var run2 = function (name: string, age: number = 20): number {
     //默认参数，调用这个方法的时候，就可以不传,默认参数可以放前面，但是调用传值时候，不传值必须明确传入undefined
     return age;
 }
-// console.log(run2('huanglin'))
+// //console.log(run2('huanglin'))
 //void用于定义没有返回值的方法
 function nullReturn(): void {
-    console.log('null return')
+    //console.log('null return')
 }
 // 剩余参数,不知道还有多少参数时候，可以在后面用...定义，会被编译成数组
 function run3(a: number, ...result: number[]): number {
     //形参可以前面放一两个参数，也可以不放
     for (let i = 0; i < result.length; i++) {
-        console.log(result[i])
+        //console.log(result[i])
     }
     return 1
 }
@@ -264,7 +296,7 @@ interface UIElement {
 class Handler {
     info: string;
     onClickGood(this: void, e: Event) {
-        console.log('clicked!');
+        //console.log('clicked!');
     };
     // onClickGood = (e: Event) => { }
 }
@@ -319,7 +351,7 @@ interface LengthWise {
     length: number
 }
 function loggingIdentity<T extends LengthWise>(arg: T): T {
-    console.log(arg.length);  // Now we know it has a .length property, so no more error
+    //console.log(arg.length);  // Now we know it has a .length property, so no more error
     return arg;
 }
 //这个时候的泛型函数，传入的参数就会被限制了，不能传入数字等没有length的
@@ -358,6 +390,16 @@ enum EnumData {
  * 枚举===================================================================================================================================================================枚举
 */
 
+
+/**
+ * 类型推论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++类型推论
+*/
+
+
+/**
+ * 类型推论===================================================================================================================================================================类型推论
+ * 
+*/
 // 静态属性和方法
 
 // es5中
@@ -372,11 +414,11 @@ class JtPerson {
         this.name = name;
     }
     run() {
-        console.log('实例方法')
+        //console.log('实例方法')
     }
     //静态方法不能直接调用类里面的属性，需要定义静态属性
     static print() {
-        console.log('静态方法' + JtPerson.age)
+        //console.log('静态方法' + JtPerson.age)
     }
 }
 // 实例方法调用
@@ -394,7 +436,7 @@ class Animai {
         this.name = name;
     }
     eat() {
-        console.log('多态方法')
+        //console.log('多态方法')
     }
 }
 class Dog extends Animai {
@@ -432,7 +474,7 @@ class animalChild extends animal {
         super(name)
     }
     eat() {
-        console.log('继承抽象类。必须实现这个方法')
+        //console.log('继承抽象类。必须实现这个方法')
     }
 }
 
@@ -451,7 +493,7 @@ interface FullName {
 }
 function printName(name: FullName) {
     //必须传入对象，有firstName  secondName
-    console.log(name.firstName + '--' + name.secondName)
+    //console.log(name.firstName + '--' + name.secondName)
 }
 var objName = {
     age: 20,
@@ -489,7 +531,7 @@ class DogAnimal implements Animal {
         this.name = name;
     }
     eat() {//约束了参数，但是不传也可以，但是不定义这个方法就报错
-        console.log('name')
+        //console.log('name')
     }
 }
 // 接口继承,继承接口后，就需要实现这两个地方的约束
@@ -537,7 +579,7 @@ class User {
 }
 class MysqlDb {
     add(user: User): boolean {
-        console.log(user)
+        //console.log(user)
         return true;
     }
 }
@@ -548,7 +590,7 @@ Db.add(u);
 // 泛型类
 class Mysql<T>{
     add(info: T): boolean {
-        console.log(info);
+        //console.log(info);
         return true;
     }
 }

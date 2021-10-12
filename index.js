@@ -57,11 +57,19 @@ var Numbers = /** @class */ (function () {
 }());
 var Classobj = new Numbers();
 var rO = {
-    name: 'huanglin'
+    name: 'huanglin',
+    password: [1, 2, 3, 4]
 };
+var ro = [1, 2, 3, 4];
+ro = [2, 3, 4]; //不能修改单个索引数据，不能push等，但是直接替换没报错
+console.log(ro);
+var a = [1, 2, 3, 4];
+// a = ro只读属性不能直接分配,但是可以用类型断言重写
+a = ro;
 var customer = {
     firstName: 'huang',
-    sayHi: function () { return "Hi huanglin"; }
+    sayHi: function () { return "Hi huanglin"; },
+    12: 'huanglin'
 };
 var list2 = ["huang", "lin"];
 var strArr = {
@@ -83,25 +91,42 @@ firendChild.firstName = 'huang';
 //         }  
 //     }
 // }
+var Control = /** @class */ (function () {
+    function Control() {
+    }
+    return Control;
+}());
+//接口继承类类型时，会继承类的成员但不包括其实现，会继承类的private和protected成员，上面的接口SelectAbled是有select方法和state验证
+var Button = /** @class */ (function (_super) {
+    __extends(Button, _super);
+    function Button() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Button.prototype.select = function () { };
+    return Button;
+}(Control));
+// class Image implements SelectAbled{
+//     select(){}
+// }
 /**
  * 类定义+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++类定义
 */
 var UserName = /** @class */ (function () {
     //new实例化这个类时候，传递的参数，要这个构造函数获取
-    //在构造函数参数加只读，把定义和传参合并
+    //在构造函数加参数，把定义和传参合并
     function UserName(name, num) {
         this.num = num;
         this.name = name;
     }
     Object.defineProperty(UserName.prototype, "fullname", {
         //存取器getter/setter来截取对对象成员的访问
-        //存取器要求你将编译器设置为输出ES5或更高（tsc -t es5 index.ts），只带有get不带有set的存取器自动被推断为readonly
+        //存取器要求你将编译器设置为输出ES5或更高（tsc -t es5 index.ts），
+        //只带有get不带有set的存取器自动被推断为readonly,
+        //存取器是为了防止数据直接被访问，在访问或者设置前加一些判断
         get: function () {
-            console.log('获取fullname');
             return this._fullname;
         },
         set: function (newName) {
-            console.log('设置fullname');
             this._fullname = newName;
         },
         enumerable: false,
@@ -139,13 +164,25 @@ var RootName = /** @class */ (function (_super) {
 }(UserName));
 var setName = new RootName("xulinlin", 13);
 setName.fullname = "存取器设置";
-// console.log(setName.fullname)
+setName.getNum();
 //抽象类作为派生类的基类，通常不会直接实例化，且内部的抽象方法不包含具体实现，必须在派生类中实现
 var Department = /** @class */ (function () {
     function Department() {
     }
     return Department;
 }());
+var abstractFun = /** @class */ (function (_super) {
+    __extends(abstractFun, _super);
+    function abstractFun() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    abstractFun.prototype.printMeet = function () {
+        console.log('抽象方法实现');
+    };
+    return abstractFun;
+}(Department));
+var absFun = new abstractFun();
+absFun.printMeet();
 // 类当做接口使用
 var interClass = /** @class */ (function () {
     function interClass() {
@@ -219,13 +256,6 @@ var Handler = /** @class */ (function () {
     return Handler;
 }());
 var h = new Handler();
-var uiElement = {
-    addClickListener: function (fun) {
-        console.log('测试this');
-        fun;
-    }
-};
-uiElement.addClickListener(h.onClickGood);
 function getInfo(str) {
     if (typeof str == 'string') {
         return '名称' + str;
@@ -237,6 +267,65 @@ function getInfo(str) {
 getInfo('123');
 /**
  * 函数定义=============================================================================================================================================函数定义
+*/
+/**
+ * 泛型+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++泛型
+*/
+// 无法创建泛型枚举和泛型命名空间
+//定义一个可以传任何类型的函数，且让参数和返回值类型相同，如果使用any，是不可控的，使用泛型可以控制
+function identity(arg) {
+    return arg;
+}
+//定义泛型的函数，处理的时候就得当他是任意类型的，比如获取他的length就不行，如果是数字，没有length
+identity('huanglin');
+//也可以不写<>中类型，直接传参数，编译器根据传入参数自动帮助我们确定T的类型
+identity('huanglin');
+//泛型类
+var IdentityClass = /** @class */ (function () {
+    function IdentityClass() {
+    }
+    return IdentityClass;
+}());
+var identClass = new IdentityClass();
+function loggingIdentity(arg) {
+    console.log(arg.length); // Now we know it has a .length property, so no more error
+    return arg;
+}
+//这个时候的泛型函数，传入的参数就会被限制了，不能传入数字等没有length的
+// loggingIdentity({length: 1})
+//在泛型约束中使用类型参数       ??????
+// interface T {
+//     K: string
+// }
+// function getProperty(obj: T, key: K) {
+//     return obj[key];
+// }
+// let x = { a: 1, b: 2, c: 3, d: 4 };
+// getProperty(x, "a"); // okay
+// getProperty(x, "m"); // error: Argument of type 'm' isn't assignable to 'a' | 'b' | 'c' | 'd'.
+// 在泛型里使用类类型     ?????
+/**
+ * 泛型=================================================================================================================================================================泛型
+*/
+/**
+ * 枚举+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++枚举
+*/
+//枚举，没有赋值，第一个默认是0，后面递增加一
+var EnumData;
+(function (EnumData) {
+    EnumData[EnumData["X"] = 0] = "X";
+    EnumData[EnumData["Y"] = 1] = "Y";
+    EnumData[EnumData["Z"] = 2] = "Z";
+})(EnumData || (EnumData = {}));
+/**
+ * 枚举===================================================================================================================================================================枚举
+*/
+/**
+ * 类型推论++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++类型推论
+*/
+/**
+ * 类型推论===================================================================================================================================================================类型推论
+ *
 */
 // 静态属性和方法
 // es5中
