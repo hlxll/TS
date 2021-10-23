@@ -455,6 +455,49 @@ function isNumber(x: any): x is number {
 /**
  * 高级类型=======================================================================================
 */
+
+/**
+ * 迭代器和生成器++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+//当一个对象实现了symbol.iterator属性时，我们认为他是可迭代的
+// 内置的Arrar，map，set，String等已经实现
+// for  in遍历对象的键，for of遍历对象的值
+// 当生成的js代码是ES5或ES3，for of只支持Array
+/**
+ * 迭代器和生成器=================================================================================
+*/
+
+
+/**
+ * 模块++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+
+export class CreateClass {
+    name: String = '123'
+}
+// 编译时候要加上Require.js是--module amd或者Node.js是--module commonjs
+//在 .d.ts文件加declare定义模块，
+
+// <reference path="index.d.ts"/>
+import * as URL from 'url'
+let url = URL.parse('huanglin');
+console.log(url)
+import Search from './extend'
+class ChildSearch extends Search {
+    constructor() {
+        super();
+    }
+    Search(): void {
+        console.log('测试导入的继承2')
+    }
+}
+let search = new ChildSearch()
+search.Search();
+//编译时采用tsc --target es6 --module commonjs index.ts index.d.ts ,将两个ts编译到一个js，commonjs可以使用node
+
+/**
+ * 模块==========================================================================================
+*/
 // 静态属性和方法
 
 // es5中
