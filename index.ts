@@ -1,3 +1,9 @@
+/// <reference path="index.d.ts"/>
+// 这个指令是用来声明依赖,对这些包的名字的解析与在 import语句里对模块名的解析类似
+// /// <reference type="" /> 
+// /// <reference no-default-lib="true"/> 把文件标记成默认库，，告诉编译器在编译过程中不要包含这个默认库，与使用命令--noLib相似
+// ///<amd-module name='NamedModule'/>给模块命名
+
 function greeter(person: string) {
     return "Hello, " + person;
 }
@@ -130,16 +136,29 @@ firendChild.firstName = 'huang'
 class Control {
     private state: string
 }
+//接口继承了类，继承了类的私有和保护成员和属性
 interface SelectAbled extends Control {
     select(): void
 }
 //接口继承类类型时，会继承类的成员但不包括其实现，会继承类的private和protected成员，上面的接口SelectAbled是有select方法和state验证
+
+//因为Control的state是私有的，只有Control的子类才能实现SelectAbled接口
 class Button extends Control implements SelectAbled {
     select() { }
 }
-// class Image implements SelectAbled{
-//     select(){}
-// }
+interface name {
+    names: string
+}
+interface password extends name {
+    pass: number;
+    (num: number): string;
+    reset(): void
+}
+let names = <password>{}
+names.names = 'huanglin'
+names.pass = 123
+
+
 
 
 
@@ -472,17 +491,18 @@ function isNumber(x: any): x is number {
  * 模块++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 
-export class CreateClass {
-    name: String = '123'
-}
-// 编译时候要加上Require.js是--module amd或者Node.js是--module commonjs
+// export class CreateClass {
+//     name: String = '123'
+// }
+// 编译时候要加上Require.js是--module amd或者Node.js是--module commonjs,编译时候需要把index.d.ts一起编译
 //在 .d.ts文件加declare定义模块，
 
-// <reference path="index.d.ts"/>
+//url用三斜线引入，必须在顶端
+
 import * as URL from 'url'
 let url = URL.parse('huanglin');
 console.log(url)
-import Search from './extend'
+import Search, { moreFile } from './extend'
 class ChildSearch extends Search {
     constructor() {
         super();
@@ -498,6 +518,178 @@ search.Search();
 /**
  * 模块==========================================================================================
 */
+
+/**
+ * 命名空间++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+//命名空间，方法属性导出才可以被外部使用，未导出的只能在命名空间使用,用namespace定义
+namespace Validation {
+    let name: String = ''
+    export class getName {
+        getName(params: String) {
+            return params;
+        }
+    }
+    class setName {
+        setName(params: String): void {
+            name = params;
+        }
+    }
+}
+let getName = new Validation.getName();
+let name = getName.getName('huanglin');
+console.log(name);
+
+/// <reference path="extend.ts"/>
+let extendSpace = new moreFile.moreFileName();
+
+
+/**
+ * 命名空间=====================================================================================
+*/
+
+/**
+ * 命名空间和模块++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+//命名空间帮助组织Web应用不错的方式，可以把所有依赖都放在HTML页面的script里
+//模块对于大型应用带来长久的模块化和可维护性上的便利，也提供了更好的代码重要，更强的封闭性以及更好的
+//使用工具进行优化
+//不应该对模块使用命名空间，使用命名空间是为了提供逻辑分组和避免命名冲突，模块文件本身已经是一个逻辑分组
+//并且他的名字是由导入这个模块的代码指定的，没有必要为导出的对象增加额外的模块层
+
+//模块解析
+//模块解析是指编译器在查找导入模块内容时所遵循的流程，
+//相对导入，比如./  ../    /开头的路径
+//其他都是非相对的
+// 非相对的才可以被解析成外部模块声明
+
+//非相对模块的导入，是从导入文件的目录开始依次向上级目录遍历，不找兄弟目录
+//ts解析是在node基础上增加了对（.ts, .tsx, .d.ts）同时在package里使用字段types来表示类似main的意义
+/**
+ * 命名空间和模块=====================================================================================
+*/
+
+/**
+ * 装饰器++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+// 额外的特性支持标注和修改类及其成员，装饰器可以实现，装饰器需要返回一个函数
+// 被装饰的声明信息作为参数传入装饰器
+// 多个装饰器应用在一个声明上，由上至下依次对装饰器表达式求值。 求值的结果会被当作函数，由下至上依次调用。
+
+function f() {
+    console.log("f(): evaluated");
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("f(): called");
+    }
+}
+function g() {
+    console.log("g(): evaluated");
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("g(): called");
+    }
+}
+//编译加参数 tsc --target ES5 --experimentalDecorators,该组合装饰器，类似 f(g(x))
+class C {
+    @f()
+    @g()
+    method() { }
+}
+function classDecorator<T extends { new(...args: any[]): {} }>(constructor: T) {
+    return class extends constructor {
+        newProperty = "new property";
+        hello = "override";
+    }
+}
+
+@classDecorator
+class Greeter {
+    property = "property";
+    hello: string;
+    constructor(m: string) {
+        this.hello = m;
+    }
+}
+
+console.log(new Greeter("world"));
+/**
+ * 装饰器=====================================================================================
+*/
+
+/**
+ * Mixins++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+//Mixins
+// 定义两个类，创建一个新的类，新的类用implements把两个类当接口，实现两个类的方法
+// Disposable Mixin
+class Disposable {
+    isDisposed: boolean;
+    dispose() {
+        this.isDisposed = true;
+    }
+
+}
+
+// Activatable Mixin
+class Activatable {
+    isActive: boolean;
+    activate() {
+        this.isActive = true;
+    }
+    deactivate() {
+        this.isActive = false;
+    }
+}
+
+class SmartObject implements Disposable, Activatable {
+    constructor() {
+        setInterval(() => console.log(this.isActive + " : " + this.isDisposed), 500);
+    }
+
+    interact() {
+        this.activate();
+    }
+
+    // Disposable
+    isDisposed: boolean = false;
+    dispose: () => void;
+    // Activatable
+    isActive: boolean = false;
+    activate: () => void;
+    deactivate: () => void;
+}
+applyMixins(SmartObject, [Disposable, Activatable]);
+
+let smartObj = new SmartObject();
+setTimeout(() => smartObj.interact(), 1000);
+
+function applyMixins(derivedCtor: any, baseCtors: any[]) {
+    baseCtors.forEach(baseCtor => {
+        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+            derivedCtor.prototype[name] = baseCtor.prototype[name];
+        });
+    });
+}
+
+/**
+ * Mixins=====================================================================================
+*/
+
+
+// 文件类型检查？？？？？？？？？？？？？？
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 静态属性和方法
 
 // es5中
@@ -699,3 +891,4 @@ var i = new UserMysql();
 i.username = '黄林';
 var dbmysql = new Mysql<UserMysql>();
 dbmysql.add(i)
+

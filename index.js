@@ -1,14 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.CreateClass = void 0;
+
 function greeter(person) {
     return "Hello, " + person;
 }
 let user = "Jane User";
 const helloStr = '类型检验';
 class Site {
-    name() {
-    }
+    name() {}
 }
 var obj = new Site();
 obj.name();
@@ -52,7 +54,9 @@ let a = [1, 2, 3, 4];
 a = ro;
 var customer = {
     firstName: 'huang',
-    sayHi: () => { return "Hi huanglin"; },
+    sayHi: () => {
+        return "Hi huanglin";
+    },
     12: 'huanglin'
 };
 var list2 = ["huang", "lin"];
@@ -75,18 +79,17 @@ firendChild.firstName = 'huang';
 //         }  
 //     }
 // }
-class Control {
-}
+class Control {}
 //接口继承类类型时，会继承类的成员但不包括其实现，会继承类的private和protected成员，上面的接口SelectAbled是有select方法和state验证
 class Button extends Control {
-    select() { }
+    select() {}
 }
 // class Image implements SelectAbled{
 //     select(){}
 // }
 /**
  * 类定义+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++类定义
-*/
+ */
 class UserName {
     //new实例化这个类时候，传递的参数，要这个构造函数获取
     //在构造函数加参数，把定义和传参合并
@@ -117,7 +120,10 @@ class UserName {
     }
 }
 //其他是类被实例化的时候才会被初始化的属性，但是staic静态成员，存在于类本身上，访问时候可以直接类名访问
-UserName.origin = { x: 0, y: 0 };
+UserName.origin = {
+    x: 0,
+    y: 0
+};
 // //console.log(UserName.origin);
 // 使用继承扩展类
 class RootName extends UserName {
@@ -136,8 +142,7 @@ setName.fullname = "存取器设置";
 setName.getNum();
 //抽象类作为派生类的基类，通常不会直接实例化，且内部的抽象方法不包含具体实现，必须在派生类中实现
 class Department {
-    constructor() {
-    }
+    constructor() {}
 }
 class abstractFun extends Department {
     printMeet() {
@@ -147,8 +152,7 @@ class abstractFun extends Department {
 let absFun = new abstractFun();
 absFun.printMeet();
 // 类当做接口使用
-class interClass {
-}
+class interClass {}
 let data = {
     x: 1,
     y: 2
@@ -156,15 +160,14 @@ let data = {
 // 类定义============================================================================================================================================================类定义
 /**
  * 函数定义++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数定义
-*/
+ */
 function run(name, age) {
     //定义返回值类型,没加？的参数是必传的
     //形参加问号，调用时候就可传可不传,可选参数必须放最后面
     // 调用实参
     if (age) {
         //console.log(`${name}+${age}`)
-    }
-    else {
+    } else {
         //console.log(`${name}`)
     }
     return 'run';
@@ -194,7 +197,10 @@ let deck = {
         return () => {
             let pickedCard = Math.floor(Math.random() * 52);
             let pickedSuit = Math.floor(pickedCard / 13);
-            return { suit: this.suits[pickedSuit], card: pickedCard % 13 };
+            return {
+                suit: this.suits[pickedSuit],
+                card: pickedCard % 13
+            };
         };
     }
 };
@@ -203,25 +209,24 @@ let pickedCard = cardPicker();
 class Handler {
     onClickGood(e) {
         //console.log('clicked!');
-    }
-    ;
+    };
 }
 let h = new Handler();
+
 function getInfo(str) {
     if (typeof str == 'string') {
         return '名称' + str;
-    }
-    else {
+    } else {
         return '年龄' + str;
     }
 }
 getInfo('123');
 /**
  * 函数定义=============================================================================================================================================函数定义
-*/
+ */
 /**
  * 泛型+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++泛型
-*/
+ */
 // 无法创建泛型枚举和泛型命名空间
 //定义一个可以传任何类型的函数，且让参数和返回值类型相同，如果使用any，是不可控的，使用泛型可以控制
 function identity(arg) {
@@ -232,9 +237,9 @@ identity('huanglin');
 //也可以不写<>中类型，直接传参数，编译器根据传入参数自动帮助我们确定T的类型
 identity('huanglin');
 //泛型类
-class IdentityClass {
-}
+class IdentityClass {}
 let identClass = new IdentityClass();
+
 function loggingIdentity(arg) {
     //console.log(arg.length);  // Now we know it has a .length property, so no more error
     return arg;
@@ -254,10 +259,10 @@ function loggingIdentity(arg) {
 // 在泛型里使用类类型     ?????
 /**
  * 泛型=================================================================================================================================================================泛型
-*/
+ */
 /**
  * 枚举+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++枚举
-*/
+ */
 //枚举，没有赋值，第一个默认是0，后面递增加一
 var EnumData;
 (function (EnumData) {
@@ -266,23 +271,26 @@ var EnumData;
     EnumData[EnumData["Z"] = 2] = "Z";
 })(EnumData || (EnumData = {}));
 let x;
-let y = { name: 'huang', pass: 12 };
+let y = {
+    name: 'huang',
+    pass: 12
+};
 x = y;
 //兼容性检查y，用baseType,必须有name就检查通过
 /**
  * 类型兼容====================================================================================
-*/
+ */
 /**
  * 高级类型++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
+ */
 // 交叉类型,大多实在混入或其他不适合典型面向对象模型的地方使用
 function extend(first, second) {
     let result = {};
     return result;
 }
 //联合类型,有些参数希望可以传number或者string，如果使用any，传入其他类型也不会报错，所以使用联合
-function padLeft(name, padding) {
-}
+function padLeft(name, padding) {}
+
 function getSmallPet() {
     // ...
     return;
@@ -299,20 +307,20 @@ function isNumber(x) {
 // 未完成，类型别名？？？？、
 /**
  * 高级类型=======================================================================================
-*/
+ */
 /**
  * 迭代器和生成器++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
+ */
 //当一个对象实现了symbol.iterator属性时，我们认为他是可迭代的
 // 内置的Arrar，map，set，String等已经实现
 // for  in遍历对象的键，for of遍历对象的值
 // 当生成的js代码是ES5或ES3，for of只支持Array
 /**
  * 迭代器和生成器=================================================================================
-*/
+ */
 /**
  * 模块++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
+ */
 class CreateClass {
     constructor() {
         this.name = '123';
@@ -339,7 +347,7 @@ search.Search();
 //编译时采用tsc --target es6 --module commonjs index.ts index.d.ts ,将两个ts编译到一个js，commonjs可以使用node
 /**
  * 模块==========================================================================================
-*/
+ */
 // 静态属性和方法
 // es5中
 // function jintai(){}
@@ -406,6 +414,7 @@ class animalChild extends animal {
         //console.log('继承抽象类。必须实现这个方法')
     }
 }
+
 function printName(name) {
     //必须传入对象，有firstName  secondName
     //console.log(name.firstName + '--' + name.secondName)
@@ -458,8 +467,7 @@ var setData = function (value1) {
 };
 getData('asd');
 // 泛型类
-class User {
-}
+class User {}
 class MysqlDb {
     add(user) {
         //console.log(user)
@@ -477,8 +485,7 @@ class Mysql {
         return true;
     }
 }
-class UserMysql {
-}
+class UserMysql {}
 var i = new UserMysql();
 i.username = '黄林';
 var dbmysql = new Mysql();
