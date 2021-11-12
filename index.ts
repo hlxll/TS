@@ -54,7 +54,7 @@ var Classobj = new Numbers();
 //Map对象,  es6的语法，在编译时候需要加上tsc --target es6 index.ts
 // let myMap = new Map();
 // myMap.set("key3","value3");
-// //console.log(myMap)
+// ////console.log(myMap)
 interface readonlyData {
     readonly name: string;
     readonly password: Array<number>
@@ -65,7 +65,7 @@ var rO: readonlyData = {
 }
 let ro: ReadonlyArray<number> = [1, 2, 3, 4]
 ro = [2, 3, 4]//不能修改单个索引数据，不能push等，但是直接替换没报错
-//console.log(ro)
+////console.log(ro)
 let a: number[] = [1, 2, 3, 4]
 // a = ro只读属性不能直接分配,但是可以用类型断言重写
 a = ro as number[]
@@ -127,7 +127,7 @@ firendChild.firstName = 'huang'
 // namespace Drawing { 
 //     export class Circle implements IShape { 
 //         public draw() { 
-//             //console.log("Circle is drawn"); 
+//             ////console.log("Circle is drawn"); 
 //         }  
 //     }
 // }
@@ -200,7 +200,7 @@ class UserName {
         return this.num
     }
 }
-// //console.log(UserName.origin);
+// ////console.log(UserName.origin);
 
 // 使用继承扩展类
 class RootName extends UserName {
@@ -210,8 +210,8 @@ class RootName extends UserName {
     //继承之后可以使用基类的数据
     setName(name) {
         this.name = name
-        //console.log(super.getNewName());
-        //console.log(super.getNum())
+        ////console.log(super.getNewName());
+        ////console.log(super.getNum())
     }
 }
 const setName = new RootName("xulinlin", 13);
@@ -227,7 +227,7 @@ abstract class Department {
 }
 class abstractFun extends Department {
     printMeet() {
-        //console.log('抽象方法实现')
+        ////console.log('抽象方法实现')
     }
 }
 let absFun = new abstractFun();
@@ -258,9 +258,9 @@ function run(name: string, age?: number): string {
     //形参加问号，调用时候就可传可不传,可选参数必须放最后面
     // 调用实参
     if (age) {
-        //console.log(`${name}+${age}`)
+        ////console.log(`${name}+${age}`)
     } else {
-        //console.log(`${name}`)
+        ////console.log(`${name}`)
     }
 
     return 'run'
@@ -270,16 +270,16 @@ var run2 = function (name: string, age: number = 20): number {
     //默认参数，调用这个方法的时候，就可以不传,默认参数可以放前面，但是调用传值时候，不传值必须明确传入undefined
     return age;
 }
-// //console.log(run2('huanglin'))
+// ////console.log(run2('huanglin'))
 //void用于定义没有返回值的方法
 function nullReturn(): void {
-    //console.log('null return')
+    ////console.log('null return')
 }
 // 剩余参数,不知道还有多少参数时候，可以在后面用...定义，会被编译成数组
 function run3(a: number, ...result: number[]): number {
     //形参可以前面放一两个参数，也可以不放
     for (let i = 0; i < result.length; i++) {
-        //console.log(result[i])
+        ////console.log(result[i])
     }
     return 1
 }
@@ -315,7 +315,7 @@ interface UIElement {
 class Handler {
     info: string;
     onClickGood(this: void, e: Event) {
-        //console.log('clicked!');
+        ////console.log('clicked!');
     };
     // onClickGood = (e: Event) => { }
 }
@@ -350,7 +350,7 @@ function identity<T>(arg: T): T {
     return arg;
 }
 //定义泛型的函数，处理的时候就得当他是任意类型的，比如获取他的length就不行，如果是数字，没有length
-identity<string>('huanglin')
+console.log(identity<string>('huanglin123123'))
 //也可以不写<>中类型，直接传参数，编译器根据传入参数自动帮助我们确定T的类型
 identity('huanglin');
 interface IdentityFace {
@@ -370,11 +370,11 @@ interface LengthWise {
     length: number
 }
 function loggingIdentity<T extends LengthWise>(arg: T): T {
-    //console.log(arg.length);  // Now we know it has a .length property, so no more error
+    ////console.log(arg.length);  // Now we know it has a .length property, so no more error
     return arg;
 }
 //这个时候的泛型函数，传入的参数就会被限制了，不能传入数字等没有length的
-// loggingIdentity({length: 1})
+loggingIdentity('123')
 
 //在泛型约束中使用类型参数       ??????
 // interface T {
@@ -501,14 +501,14 @@ function isNumber(x: any): x is number {
 
 import * as URL from 'url'
 let url = URL.parse('huanglin');
-console.log(url)
+//console.log(url)
 import Search, { moreFile } from './extend'
 class ChildSearch extends Search {
     constructor() {
         super();
     }
     Search(): void {
-        console.log('测试导入的继承2')
+        //console.log('测试导入的继承2')
     }
 }
 let search = new ChildSearch()
@@ -538,7 +538,7 @@ namespace Validation {
 }
 let getName = new Validation.getName();
 let name = getName.getName('huanglin');
-console.log(name);
+//console.log(name);
 
 /// <reference path="extend.ts"/>
 let extendSpace = new moreFile.moreFileName();
@@ -577,15 +577,15 @@ let extendSpace = new moreFile.moreFileName();
 // 多个装饰器应用在一个声明上，由上至下依次对装饰器表达式求值。 求值的结果会被当作函数，由下至上依次调用。
 
 function f() {
-    console.log("f(): evaluated");
+    //console.log("f(): evaluated");
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        console.log("f(): called");
+        //console.log("f(): called");
     }
 }
 function g() {
-    console.log("g(): evaluated");
+    //console.log("g(): evaluated");
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        console.log("g(): called");
+        //console.log("g(): called");
     }
 }
 //编译加参数 tsc --target ES5 --experimentalDecorators,该组合装饰器，类似 f(g(x))
@@ -610,7 +610,7 @@ class Greeter {
     }
 }
 
-console.log(new Greeter("world"));
+//console.log(new Greeter("world"));
 /**
  * 装饰器=====================================================================================
 */
@@ -642,7 +642,7 @@ class Activatable {
 
 class SmartObject implements Disposable, Activatable {
     constructor() {
-        setInterval(() => console.log(this.isActive + " : " + this.isDisposed), 500);
+        setInterval(() => //console.log(this.isActive + " : " + this.isDisposed), 500);
     }
 
     interact() {
@@ -704,11 +704,11 @@ class JtPerson {
         this.name = name;
     }
     run() {
-        //console.log('实例方法')
+        ////console.log('实例方法')
     }
     //静态方法不能直接调用类里面的属性，需要定义静态属性
     static print() {
-        //console.log('静态方法' + JtPerson.age)
+        ////console.log('静态方法' + JtPerson.age)
     }
 }
 // 实例方法调用
@@ -726,7 +726,7 @@ class Animai {
         this.name = name;
     }
     eat() {
-        //console.log('多态方法')
+        ////console.log('多态方法')
     }
 }
 class Dog extends Animai {
@@ -764,7 +764,7 @@ class animalChild extends animal {
         super(name)
     }
     eat() {
-        //console.log('继承抽象类。必须实现这个方法')
+        ////console.log('继承抽象类。必须实现这个方法')
     }
 }
 
@@ -783,7 +783,7 @@ interface FullName {
 }
 function printName(name: FullName) {
     //必须传入对象，有firstName  secondName
-    //console.log(name.firstName + '--' + name.secondName)
+    ////console.log(name.firstName + '--' + name.secondName)
 }
 var objName = {
     age: 20,
@@ -821,7 +821,7 @@ class DogAnimal implements Animal {
         this.name = name;
     }
     eat() {//约束了参数，但是不传也可以，但是不定义这个方法就报错
-        //console.log('name')
+        ////console.log('name')
     }
 }
 // 接口继承,继承接口后，就需要实现这两个地方的约束
@@ -869,7 +869,7 @@ class User {
 }
 class MysqlDb {
     add(user: User): boolean {
-        //console.log(user)
+        ////console.log(user)
         return true;
     }
 }
@@ -880,7 +880,7 @@ Db.add(u);
 // 泛型类
 class Mysql<T>{
     add(info: T): boolean {
-        //console.log(info);
+        ////console.log(info);
         return true;
     }
 }
