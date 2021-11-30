@@ -370,7 +370,7 @@ interface LengthWise {
     length: number
 }
 function loggingIdentity<T extends LengthWise>(arg: T): T {
-    ////console.log(arg.length);  // Now we know it has a .length property, so no more error
+    console.log(arg.length);  // Now we know it has a .length property, so no more error
     return arg;
 }
 //这个时候的泛型函数，传入的参数就会被限制了，不能传入数字等没有length的
@@ -408,6 +408,7 @@ enum EnumData {
 /**
  * 枚举===================================================================================================================================================================枚举
 */
+
 
 
 /**
@@ -748,7 +749,7 @@ class Cat extends Animai {
 
 //抽象:abstract关键字定义抽象类和抽象方法，抽象类中的抽象方法不包含具体实现并且必须在派生类中实现
 
-//abstract抽象方法只能放在抽象类里面
+//abstract抽象方法只能放在抽象类里面，抽象类不能直接实现
 
 //抽象类和抽象方法用来定义标准，animal这个类要求子类必须包含eat方法
 abstract class animal {
@@ -764,7 +765,7 @@ class animalChild extends animal {
         super(name)
     }
     eat() {
-        ////console.log('继承抽象类。必须实现这个方法')
+        ////console.log('继承抽象类。必须实现这个抽象方法')
     }
 }
 
