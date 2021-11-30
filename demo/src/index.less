@@ -1,0 +1,44 @@
+@bg-color: #b7d4a8;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main {
+    width: 360px;
+    height: 420px;
+    background-color: @bg-color;
+    margin: 100px auto;
+    border: 10px solid black;
+    border-radius: 40px;
+
+    #stage {
+        width: 304px;
+        height: 304px;
+        border: 2px solid black;
+        margin: auto;
+        position: relative;
+
+        #snake {
+            &>div {
+                width: 10px;
+                height: 10px;
+                border: 1px solid @bg-color;
+                background-color: black;
+                position: absolute;
+            }
+        }
+
+        &>#food {
+            width: 10px;
+            height: 10px;
+            border: 1px solid @bg-color;
+            background-color: black;
+            position: absolute;
+            left: 40px;
+            top: 100px;
+        }
+    }
+}
